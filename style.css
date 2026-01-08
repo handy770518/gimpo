@@ -1,27 +1,69 @@
 body {
     background: #202028;
     color: #fff;
-    font-family: sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
     margin: 0;
+    overflow: hidden;
+}
+
+.game-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 30px;
+    position: relative;
+}
+
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-box {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border: 2px solid #555;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 100px;
+}
+
+.info-box p {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #ccc;
+    letter-spacing: 2px;
 }
 
 #tetris {
-    border: 2px solid #fff;
+    border: 4px solid #fff;
     background-color: #000;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+#next {
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 #score {
-    font-size: 2em;
-    margin-bottom: 10px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffd700;
 }
 
-.controls {
-    margin-top: 15px;
-    color: #aaa;
+.controls-guide {
+    position: absolute;
+    bottom: -60px;
+    width: 100%;
+    text-align: center;
+    color: #888;
     font-size: 0.9em;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
 }

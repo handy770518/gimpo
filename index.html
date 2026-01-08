@@ -2,17 +2,34 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>심플 테트리스</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>테트리스 게임</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
-        <div id="score">점수: 0</div>
+        <!-- 왼쪽 정보 패널 -->
+        <div class="side-panel">
+            <div class="info-box">
+                <p>NEXT</p>
+                <canvas id="next" width="80" height="80"></canvas>
+            </div>
+            <div class="info-box">
+                <p>SCORE</p>
+                <div id="score">0</div>
+            </div>
+        </div>
+
+        <!-- 메인 게임 보드 -->
         <canvas id="tetris" width="240" height="400"></canvas>
-        <div class="controls">
-            <p>방향키: 이동 / 위: 회전 / 아래: 빨리 내리기</p>
+
+        <div class="controls-guide">
+            <p>← → : 이동</p>
+            <p>↑ : 회전</p>
+            <p>↓ : 빨리 내리기</p>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
