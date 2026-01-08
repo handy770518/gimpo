@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, onSnapshot, collection, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+// 사용자님의 스크린샷 값을 한 글자씩 대조하여 재작성했습니다. 
 const firebaseConfig = {
     apiKey: "AIzaSyCBrvOhfy_GN2IVvkxI8X8cmr2o-rgNm-Q",
     authDomain: "gimpotest-f55d8.firebaseapp.com",
@@ -22,14 +23,10 @@ let highestScore = 0;
 const loginScreen = document.getElementById('login-screen');
 const gameUI = document.getElementById('game-ui');
 
-// [추가] 로그인 버튼 - 오류 발생 시 알림창 띄우기
+// 로그인 버튼
 document.getElementById('btn-login').onclick = () => {
     signInWithPopup(auth, provider).catch(err => {
-        if(err.code === 'auth/unauthorized-domain') {
-            alert("오류: Firebase 콘솔에서 현재 도메인(github.io)을 '승인된 도메인'에 추가해야 합니다.");
-        } else {
-            alert("로그인 실패: " + err.message);
-        }
+        alert("로그인 실패: " + err.message);
     });
 };
 
@@ -42,7 +39,7 @@ onAuthStateChanged(auth, (user) => {
         gameUI.style.display = 'block';
         document.getElementById('user-display').innerText = user.displayName;
         subscribeHighScore(user.uid);
-        subscribeRanking(); // [추가] 랭킹 실시간 업데이트 시작
+        subscribeRanking();
         playerReset();
         if (!gameRunning) update();
     } else {
@@ -61,7 +58,6 @@ function subscribeHighScore(uid) {
     });
 }
 
-// [추가] 전 세계 랭킹 TOP 5 가져오기
 function subscribeRanking() {
     const q = query(collection(db, "scores"), orderBy("score", "desc"), limit(5));
     onSnapshot(q, (snapshot) => {
@@ -82,23 +78,18 @@ async function saveHighScore(score) {
         score: score,
         name: currentUser.displayName,
         updatedAt: new Date()
-    }).catch(err => {
-        console.error("저장 실패. 파이어베이스 규칙을 확인하세요:", err);
     });
 }
 
-// --- 테트리스 로직 (변동 없음) ---
+// --- 테트리스 로직 ---
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 context.scale(20, 20);
-
 const nextCanvas = document.getElementById('next');
 const nextContext = nextCanvas.getContext('2d');
 nextContext.scale(20, 20);
-
 let gameRunning = false;
 const colors = [null, '#FF0D72', '#0DC2FF', '#0DFF72', '#F538FF', '#FF8E0D', '#FFE138', '#3877FF'];
-
 function createPiece(type) {
     if (type === 'I') return [[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]];
     if (type === 'L') return [[0,2,0],[0,2,0],[0,2,2]];
@@ -108,7 +99,6 @@ function createPiece(type) {
     if (type === 'S') return [[0,6,6],[6,6,0],[0,0,0]];
     if (type === 'T') return [[0,7,0],[7,7,7],[0,0,0]];
 }
-
 function drawMatrix(matrix, offset, ctx) {
     matrix.forEach((row, y) => {
         row.forEach((value, x) => {
@@ -119,13 +109,11 @@ function drawMatrix(matrix, offset, ctx) {
         });
     });
 }
-
 function createMatrix(w, h) {
     const matrix = [];
     while (h--) matrix.push(new Array(w).fill(0));
     return matrix;
 }
-
 function collide(arena, player) {
     const [m, o] = [player.matrix, player.pos];
     for (let y = 0; y < m.length; ++y) {
@@ -135,7 +123,6 @@ function collide(arena, player) {
     }
     return false;
 }
-
 function merge(arena, player) {
     player.matrix.forEach((row, y) => {
         row.forEach((value, x) => {
@@ -143,7 +130,6 @@ function merge(arena, player) {
         });
     });
 }
-
 function rotate(matrix, dir) {
     for (let y = 0; y < matrix.length; ++y) {
         for (let x = 0; x < y; ++x) [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
@@ -151,7 +137,6 @@ function rotate(matrix, dir) {
     if (dir > 0) matrix.forEach(row => row.reverse());
     else matrix.reverse();
 }
-
 function playerDrop() {
     player.pos.y++;
     if (collide(arena, player)) {
@@ -163,12 +148,10 @@ function playerDrop() {
     }
     dropCounter = 0;
 }
-
 function playerMove(dir) {
     player.pos.x += dir;
     if (collide(arena, player)) player.pos.x -= dir;
 }
-
 function playerReset() {
     const pieces = 'ILJOTSZ';
     if (!player.next) player.next = createPiece(pieces[pieces.length * Math.random() | 0]);
@@ -184,7 +167,6 @@ function playerReset() {
     }
     drawNext();
 }
-
 function playerRotate(dir) {
     const pos = player.pos.x;
     let offset = 1;
@@ -199,7 +181,6 @@ function playerRotate(dir) {
         }
     }
 }
-
 function arenaSweep() {
     let rowCount = 1;
     outer: for (let y = arena.length - 1; y > 0; --y) {
@@ -214,27 +195,22 @@ function arenaSweep() {
     }
     if (player.score > highestScore) saveHighScore(player.score);
 }
-
 function updateScore() {
     document.getElementById('score').innerText = player.score;
 }
-
 function drawNext() {
     nextContext.fillStyle = '#000';
     nextContext.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
     drawMatrix(player.next, {x: 1, y: 1}, nextContext);
 }
-
 function draw() {
     context.fillStyle = '#000';
     context.fillRect(0, 0, canvas.width, canvas.height);
     drawMatrix(arena, {x: 0, y: 0}, context);
     drawMatrix(player.matrix, player.pos, context);
 }
-
 const arena = createMatrix(12, 20);
 const player = { pos: {x: 0, y: 0}, matrix: null, next: null, score: 0 };
-
 document.addEventListener('keydown', event => {
     if (!currentUser) return;
     if (event.keyCode === 37) playerMove(-1);
@@ -242,11 +218,9 @@ document.addEventListener('keydown', event => {
     else if (event.keyCode === 40) playerDrop();
     else if (event.keyCode === 38) playerRotate(1);
 });
-
 let dropCounter = 0;
 let dropInterval = 1000;
 let lastTime = 0;
-
 function update(time = 0) {
     if (!currentUser) { gameRunning = false; return; }
     gameRunning = true;
