@@ -1,69 +1,81 @@
 body {
-    background: #202028;
+    background: #1a1a1a;
     color: #fff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Arial', sans-serif;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
     margin: 0;
-    overflow: hidden;
 }
 
+/* 로그인 화면 스타일 */
+#login-screen {
+    text-align: center;
+    padding: 40px;
+    background: #2c2c2c;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+#btn-login {
+    padding: 12px 24px;
+    font-size: 16px;
+    background: #4285F4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#btn-login:hover { background: #357abd; }
+
+/* 상단 유저 정보 바 */
+.user-bar {
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 14px;
+}
+
+#btn-logout {
+    background: #ff4b2b;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+/* 게임 레이아웃 */
 .game-container {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 30px;
-    position: relative;
+    gap: 20px;
 }
 
 .side-panel {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
 .info-box {
-    background: rgba(255, 255, 255, 0.1);
+    background: #333;
     padding: 15px;
     border: 2px solid #555;
-    border-radius: 8px;
     text-align: center;
-    min-width: 100px;
-}
-
-.info-box p {
-    margin: 0 0 10px 0;
-    font-size: 14px;
-    color: #ccc;
-    letter-spacing: 2px;
+    min-width: 80px;
 }
 
 #tetris {
     border: 4px solid #fff;
     background-color: #000;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
-#next {
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
-#score {
-    font-size: 28px;
-    font-weight: bold;
-    color: #ffd700;
-}
-
-.controls-guide {
-    position: absolute;
-    bottom: -60px;
-    width: 100%;
-    text-align: center;
-    color: #888;
-    font-size: 0.9em;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
+#next { background-color: #000; }
+#score { font-size: 24px; font-weight: bold; color: #ffd700; }
+#high-score { color: #00ffcc; font-weight: bold; }
