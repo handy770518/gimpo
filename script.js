@@ -2,14 +2,15 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// [중요] 여기에 본인의 파이어베이스 설정을 붙여넣으세요!
+// 사용자님의 스크린샷에서 복사한 설정값입니다.
 const firebaseConfig = {
-    apiKey: "AIzaSy...",
-    authDomain: "your-project.firebaseapp.com",
-    projectId: "your-project",
-    storageBucket: "your-project.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef..."
+    apiKey: "AIzaSyCBrvOhfy_GN2IVvkxI8X8cmr2o-rgNm-Q",
+    authDomain: "gimpotest-f55d8.firebaseapp.com",
+    projectId: "gimpotest-f55d8",
+    storageBucket: "gimpotest-f55d8.firebasestorage.app",
+    messagingSenderId: "1096819588772",
+    appId: "1:1096819588772:web:3708dfb56823046e127031",
+    measurementId: "G-PKMTY3Q0DC"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -17,17 +18,16 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-// 변수 설정
 let currentUser = null;
 let highestScore = 0;
 const loginScreen = document.getElementById('login-screen');
 const gameUI = document.getElementById('game-ui');
 
-// --- 파이어베이스 로그인 로직 ---
-
+// 로그인/로그아웃 버튼 클릭 이벤트
 document.getElementById('btn-login').onclick = () => signInWithPopup(auth, provider);
 document.getElementById('btn-logout').onclick = () => signOut(auth);
 
+// 로그인 상태 감시
 onAuthStateChanged(auth, (user) => {
     if (user) {
         currentUser = user;
@@ -44,6 +44,7 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
+// 서버에서 실시간 최고점수 구독
 function subscribeHighScore(uid) {
     onSnapshot(doc(db, "scores", uid), (doc) => {
         if (doc.exists()) {
@@ -53,6 +54,7 @@ function subscribeHighScore(uid) {
     });
 }
 
+// 최고점수 서버 저장
 async function saveHighScore(score) {
     if (!currentUser || score <= highestScore) return;
     await setDoc(doc(db, "scores", currentUser.uid), {
@@ -62,8 +64,7 @@ async function saveHighScore(score) {
     });
 }
 
-// --- 테트리스 게임 로직 (수정 없이 통합) ---
-
+// --- 테트리스 로직 ---
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 context.scale(20, 20);
@@ -154,7 +155,7 @@ function playerReset() {
     player.pos.x = (arena[0].length / 2 | 0) - (player.matrix[0].length / 2 | 0);
     if (collide(arena, player)) {
         arena.forEach(row => row.fill(0));
-        saveHighScore(player.score); // 게임오버 시 최고점수 체크 후 저장
+        saveHighScore(player.score); 
         player.score = 0;
         updateScore();
     }
@@ -188,7 +189,7 @@ function arenaSweep() {
         player.score += rowCount * 10;
         rowCount *= 2;
     }
-    if (player.score > highestScore) saveHighScore(player.score); // 줄 지울 때 실시간 갱신
+    if (player.score > highestScore) saveHighScore(player.score);
 }
 
 function updateScore() {

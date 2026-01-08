@@ -10,7 +10,6 @@ body {
     margin: 0;
 }
 
-/* 로그인 화면 스타일 */
 #login-screen {
     text-align: center;
     padding: 40px;
@@ -27,12 +26,8 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: 0.3s;
 }
 
-#btn-login:hover { background: #357abd; }
-
-/* 상단 유저 정보 바 */
 .user-bar {
     margin-bottom: 20px;
     background: rgba(255, 255, 255, 0.1);
@@ -51,7 +46,6 @@ body {
     cursor: pointer;
 }
 
-/* 게임 레이아웃 */
 .game-container {
     display: flex;
     gap: 20px;
@@ -68,7 +62,6 @@ body {
     padding: 15px;
     border: 2px solid #555;
     text-align: center;
-    min-width: 80px;
 }
 
 #tetris {
