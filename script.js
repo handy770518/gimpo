@@ -2,15 +2,15 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, onSnapshot, collection, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// 사용자님의 스크린샷 값을 한 글자씩 대조하여 재작성했습니다. 
+// 사용자님의 스크린샷 값을 토대로 작성한 설정입니다. 띄어쓰기 주의!
 const firebaseConfig = {
-    apiKey: "AIzaSyCBrvOhfy_GN2IVvkxI8X8cmr2o-rgNm-Q",
-    authDomain: "gimpotest-f55d8.firebaseapp.com",
-    projectId: "gimpotest-f55d8",
-    storageBucket: "gimpotest-f55d8.firebasestorage.app",
-    messagingSenderId: "1096819588772",
-    appId: "1:1096819588772:web:3708dfb56823046e127031",
-    measurementId: "G-PKMTY3Q0DC"
+  apiKey: "AIzaSyCBrvOhfy_GN2IVvkxI8X8cmr2o-rgNm-Q",
+  authDomain: "gimpotest-f55d8.firebaseapp.com",
+  projectId: "gimpotest-f55d8",
+  storageBucket: "gimpotest-f55d8.firebasestorage.app",
+  messagingSenderId: "1096819588772",
+  appId: "1:1096819588772:web:3708dfb56823046e127031",
+  measurementId: "G-PKMTY3Q0DC"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -23,7 +23,6 @@ let highestScore = 0;
 const loginScreen = document.getElementById('login-screen');
 const gameUI = document.getElementById('game-ui');
 
-// 로그인 버튼
 document.getElementById('btn-login').onclick = () => {
     signInWithPopup(auth, provider).catch(err => {
         alert("로그인 실패: " + err.message);
@@ -81,7 +80,6 @@ async function saveHighScore(score) {
     });
 }
 
-// --- 테트리스 로직 ---
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 context.scale(20, 20);
@@ -90,6 +88,7 @@ const nextContext = nextCanvas.getContext('2d');
 nextContext.scale(20, 20);
 let gameRunning = false;
 const colors = [null, '#FF0D72', '#0DC2FF', '#0DFF72', '#F538FF', '#FF8E0D', '#FFE138', '#3877FF'];
+
 function createPiece(type) {
     if (type === 'I') return [[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]];
     if (type === 'L') return [[0,2,0],[0,2,0],[0,2,2]];
