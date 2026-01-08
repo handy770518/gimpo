@@ -22,18 +22,29 @@
             <button id="btn-logout">로그아웃</button>
         </div>
 
-        <div class="game-container">
-            <div class="side-panel">
-                <div class="info-box">
-                    <p>NEXT</p>
-                    <canvas id="next" width="80" height="80"></canvas>
+        <div class="main-layout">
+            <!-- 왼쪽: 게임 판 -->
+            <div class="game-container">
+                <div class="side-panel">
+                    <div class="info-box">
+                        <p>NEXT</p>
+                        <canvas id="next" width="80" height="80"></canvas>
+                    </div>
+                    <div class="info-box">
+                        <p>SCORE</p>
+                        <div id="score">0</div>
+                    </div>
                 </div>
-                <div class="info-box">
-                    <p>SCORE</p>
-                    <div id="score">0</div>
-                </div>
+                <canvas id="tetris" width="240" height="400"></canvas>
             </div>
-            <canvas id="tetris" width="240" height="400"></canvas>
+
+            <!-- 오른쪽: 실시간 랭킹 -->
+            <div class="ranking-box">
+                <h3>TOP 5 RANKING</h3>
+                <ul id="ranking-list">
+                    <li>불러오는 중...</li>
+                </ul>
+            </div>
         </div>
     </div>
 

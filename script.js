@@ -1,8 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, doc, setDoc, onSnapshot, collection, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// 사용자님의 스크린샷에서 복사한 설정값입니다.
 const firebaseConfig = {
     apiKey: "AIzaSyCBrvOhfy_GN2IVvkxI8X8cmr2o-rgNm-Q",
     authDomain: "gimpotest-f55d8.firebaseapp.com",
@@ -23,11 +22,19 @@ let highestScore = 0;
 const loginScreen = document.getElementById('login-screen');
 const gameUI = document.getElementById('game-ui');
 
-// 로그인/로그아웃 버튼 클릭 이벤트
-document.getElementById('btn-login').onclick = () => signInWithPopup(auth, provider);
+// [추가] 로그인 버튼 - 오류 발생 시 알림창 띄우기
+document.getElementById('btn-login').onclick = () => {
+    signInWithPopup(auth, provider).catch(err => {
+        if(err.code === 'auth/unauthorized-domain') {
+            alert("오류: Firebase 콘솔에서 현재 도메인(github.io)을 '승인된 도메인'에 추가해야 합니다.");
+        } else {
+            alert("로그인 실패: " + err.message);
+        }
+    });
+};
+
 document.getElementById('btn-logout').onclick = () => signOut(auth);
 
-// 로그인 상태 감시
 onAuthStateChanged(auth, (user) => {
     if (user) {
         currentUser = user;
@@ -35,6 +42,7 @@ onAuthStateChanged(auth, (user) => {
         gameUI.style.display = 'block';
         document.getElementById('user-display').innerText = user.displayName;
         subscribeHighScore(user.uid);
+        subscribeRanking(); // [추가] 랭킹 실시간 업데이트 시작
         playerReset();
         if (!gameRunning) update();
     } else {
@@ -44,7 +52,6 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// 서버에서 실시간 최고점수 구독
 function subscribeHighScore(uid) {
     onSnapshot(doc(db, "scores", uid), (doc) => {
         if (doc.exists()) {
@@ -54,17 +61,33 @@ function subscribeHighScore(uid) {
     });
 }
 
-// 최고점수 서버 저장
+// [추가] 전 세계 랭킹 TOP 5 가져오기
+function subscribeRanking() {
+    const q = query(collection(db, "scores"), orderBy("score", "desc"), limit(5));
+    onSnapshot(q, (snapshot) => {
+        const rankingList = document.getElementById('ranking-list');
+        rankingList.innerHTML = '';
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            const li = document.createElement('li');
+            li.innerHTML = `<span>${data.name || '무명'}</span> <b>${data.score}</b>`;
+            rankingList.appendChild(li);
+        });
+    });
+}
+
 async function saveHighScore(score) {
     if (!currentUser || score <= highestScore) return;
     await setDoc(doc(db, "scores", currentUser.uid), {
         score: score,
         name: currentUser.displayName,
         updatedAt: new Date()
+    }).catch(err => {
+        console.error("저장 실패. 파이어베이스 규칙을 확인하세요:", err);
     });
 }
 
-// --- 테트리스 로직 ---
+// --- 테트리스 로직 (변동 없음) ---
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 context.scale(20, 20);
