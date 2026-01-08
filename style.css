@@ -34,6 +34,7 @@ body {
     padding: 10px 20px;
     border-radius: 50px;
     font-size: 14px;
+    text-align: center;
 }
 
 #btn-logout {
@@ -44,6 +45,13 @@ body {
     border-radius: 5px;
     margin-left: 10px;
     cursor: pointer;
+}
+
+/* 메인 레이아웃: 게임과 랭킹을 가로로 배치 */
+.main-layout {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
 }
 
 .game-container {
@@ -72,3 +80,32 @@ body {
 #next { background-color: #000; }
 #score { font-size: 24px; font-weight: bold; color: #ffd700; }
 #high-score { color: #00ffcc; font-weight: bold; }
+
+/* 랭킹 스타일 */
+.ranking-box {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #444;
+    width: 200px;
+}
+
+.ranking-box h3 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #ffd700;
+    text-align: center;
+}
+
+#ranking-list {
+    list-style: none;
+    padding: 0;
+}
+
+#ranking-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+}
